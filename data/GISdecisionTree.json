@@ -1,0 +1,43 @@
+{
+ "name": "Identify Dataset",
+ "children": [
+  {
+   "name": "Add row in Metadata table",
+   "children": [
+    {
+     "name": "Web Service",
+     "children": [    
+        {"name": "Create legend graphic (jpg)"},
+        {"name": "Bring into map: Leaflet.js"}
+    ]
+    },
+    {
+     "name": "No Web Service",
+     "children": [
+      {"name": "Import Into PostGIS",
+       "children": [
+        {"name": "Large File",
+          "children": [
+            {"name": "Import to Geoserver",
+              "children": [
+                {"name": "Define Symbology (geoserver)"},
+                {"name": "Create legend graphic (jpg)"},
+                {"name": "Bring into map: Leaflet.js"}
+              ]}
+           ]},
+          {"name": "Small File",
+          "children": [
+            {"name": "Export to GeoJSON",
+              "children": [
+                {"name": "Create custom symbology (Leaflet.js)"},
+                {"name": "Create legend graphic (jpg)"},
+                {"name": "Bring into map: Leaflet.js"}
+              ]}
+           ]}
+       ]}
+     ]
+    }
+   ]
+  }
+ ]
+}

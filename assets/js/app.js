@@ -87,12 +87,18 @@ var mapquestHYB = L.layerGroup([L.tileLayer("http://{s}.mqcdn.com/tiles/1.0.0/sa
   attribution: 'Labels courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a> <img src="http://developer.mapquest.com/content/osm/mq_logo.png">. Map data (c) <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> contributors, CC-BY-SA. Portions Courtesy NASA/JPL-Caltech and U.S. Depart. of Agriculture, Farm Service Agency'
 })]);
 
+
+var topoESRI = new L.TileLayer("http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}.png", {
+    maxZoom: 19,
+    attribution: 'Basemap Courtesy of <a href="http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer" target="_blank">ESRI</a>'
+  });
+
 /* Overlay Layers */
 
 map = L.map("map", {
   /*zoom: 10,
   center: [40.702222, -73.979378],*/
-  layers: [mapquestOSM],
+  layers: [topoESRI],
   zoomControl: false,
   attributionControl: false
 });
@@ -216,9 +222,9 @@ if (document.body.clientWidth <= 767) {
 }
 
 var baseLayers = {
+  "Terrain": topoESRI,
   "Street Map": mapquestOSM,
-  "Aerial Imagery": mapquestOAM,
-  "Imagery with Streets": mapquestHYB
+  "Imagery": mapquestHYB
 };
 
 var groupedOverlays = {
