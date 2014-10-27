@@ -1,6 +1,33 @@
 //IMAGE OVERLAYS
 
-var PRISMtmax_slope = L.imageOverlay('data/PRISMtmax_slope/frame0.png', [[40.395,-80.06],[47.395,-66.979]],{opacity:0.5});
+/*var PRISMtmax_slope = L.imageOverlay('data/PRISMtmax_slope/frame0.png', [[40.395,-80.06],[47.395,-66.979]],{opacity:0.5});*/
+var PRISMtmax_slope = new L.TileLayer.WMS("http://beierlab.net:8081/thredds/wms/monthly/Prism/PRISMComputedDataAllMonths_1980to2009.nc?service=WMS", {
+  version:'1.3.0',
+  layers: 'tmax_slope',
+  COLORSCALERANGE:'-0.2,0.24',
+  //SRS:'ESPG:4326',
+  //CRS:'CRS:84',
+  format:'image/png',
+  styles:'BOXFILL/redblue',
+  TIME:'2009-1-01T00:00:00.000Z',
+  transparent: true,
+  opacity: .75,
+  zIndex: 100
+}); 
+
+var PRISMtmax_mean = new L.TileLayer.WMS("http://beierlab.net:8081/thredds/wms/monthly/Prism/PRISMComputedDataAllMonths_1980to2009.nc?service=WMS", {
+  version:'1.3.0',
+  layers: 'tmax_mean',
+  COLORSCALERANGE:'-10,30',
+  //SRS:'ESPG:4326',
+  //CRS:'CRS:84',
+  format:'image/png',
+  styles:'BOXFILL/rainbow',
+  TIME:'2009-1-01T00:00:00.000Z',
+  transparent: true,
+  opacity: .75,
+  zIndex: 100
+});  
 
 // TILE Layers
 /* Basemap Layers */

@@ -85,6 +85,7 @@
                         <option value="transportation">Transportation</option>
                         <option value="communication">Tele-comunications</option>
                         <option value="health">Public Health</option>
+                        <option value="climate">Climate Data</option>
                       </select>
                     </div>
                   </div>

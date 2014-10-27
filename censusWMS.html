@@ -175,6 +175,12 @@
 
                     nexrad.setView
 
+var topoESRI = new L.TileLayer("http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}.png", {
+    maxZoom: 19,
+    attribution: 'Basemap Courtesy of <a href="http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer" target="_blank">ESRI</a>'
+  });
+
+
             map = new L.Map('mapDiv',
                     {
                         center: new L.LatLng(39.748, -104.981),
@@ -186,10 +192,6 @@
                     map.addLayer(topoESRI, false);
 
 
-var topoESRI = new L.TileLayer("http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}.png", {
-    maxZoom: 19,
-    attribution: 'Basemap Courtesy of <a href="http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer" target="_blank">ESRI</a>'
-  });
 
             var baseMaps = {
                 "topoESRI": topoESRI
