@@ -29,6 +29,23 @@ var PRISMtmax_mean = new L.TileLayer.WMS("http://beierlab.net:8081/thredds/wms/m
   zIndex: 100
 });  
 
+var ppt_SRESB1 = new L.TileLayer.WMS("http://tds.gisclimatechange.ucar.edu/thredds/wms/products/files/ppt_SRESB1_near_seasonal_down_anomaly.nc?service=WMS", {
+  version:'1.3.0',
+  layers: 'ppt',
+  COLORSCALERANGE:'-10,30',
+  //SRS:'ESPG:4326',
+  //CRS:'CRS:84',
+  format:'image/png',
+  styles:'BOXFILL/ppt',
+  TIME:'2039-02-15T00:00:00Z',
+  transparent: true,
+  opacity: .75,
+  zIndex: 100
+});  
+
+http://tds.gisclimatechange.ucar.edu/thredds/wms/products/files/ppt_SRESB1_near_seasonal_down_anomaly.nc?service=WMS&version=1.3.0&request=GetMap&Layers=ppt&bbox=-125.5,24,-66,50&SRS=ESPG:4326&CRS=CRS:84&COLORSCALERANGE=-100,55&width=850&height=500&styles=BOXFILL/rainbow&format=image/png&TIME=2039-02-15T00:00:00Z
+
+
 // TILE Layers
 /* Basemap Layers */
 var mapquestOSM = L.tileLayer("http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png", {

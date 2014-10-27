@@ -1,6 +1,6 @@
 //PRISMtmax_slope = L.imageOverlay('data/PRISMtmax_slope/frame0.png', [[40.395,-80.06],[47.395,-66.979]],{opacity:0.5});
 /* function for PRISM slider   */
-$( "#panel-legend-PRISMtmax_slope" ).append('<div><label for="amount-PRISMtmax_slope">Mean Max. Temp. Trend (Monthly):</label><input type="text" id="amount-PRISMtmax_slope" readonly style="border:0; color:#f6931f; font-weight:bold;"></div><div id="slider-PRISMtmax_slope"></div>' );
+$( "#tools-PRISMtmax_slope" ).append('<div><label for="amount-PRISMtmax_slope">Mean Max. Temp. Trend (Monthly):</label><input type="text" id="amount-PRISMtmax_slope" readonly style="border:0; color:#f6931f; font-weight:bold;"></div><div id="slider-PRISMtmax_slope"></div>' );
 
 $(function() {
     $( "#slider-PRISMtmax_slope" ).slider({
