@@ -16,11 +16,6 @@ $("#about-btn").click(function() {
   return false;
 });
 
-$("#wmsSlider-btn").click(function() {
-  $("#wmsSliderModal").modal("show");
-  return false;
-});
-
 $("#full-extent-btn").click(function() {
   map.fitBounds(ny_county.getBounds());
   return false;

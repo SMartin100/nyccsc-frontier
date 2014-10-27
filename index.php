@@ -53,7 +53,6 @@
               <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="login-btn"><i class="fa fa-user"></i>&nbsp;&nbsp;Login</a></li>
             </ul>
           </li>
-          <li class="hidden-xs"><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="wmsSlider-btn"><i class="fa fa-check-square white"></i>&nbsp;&nbsp;WMS Slider</a></li>
           <li class="hidden-xs"><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="list-btn"><i class="fa fa-check-square white"></i>&nbsp;&nbsp;Layer Selector</a></li>
         </ul>
       </div><!--/.navbar-collapse -->
@@ -183,28 +182,6 @@
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
-    <div class="modal" id="wmsSliderModal" tabindex="-1" role="dialog">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title text-primary" id="feature-title"></h4>
-          </div>
-          <div class="modal-body" id="wmsSlider-body">
-            <p>
-              <label for="amount">Regression Slope (1 month increments):</label>
-              <input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
-            </p>
-             
-            <div id="slider"></div>
-            <div id="slider-legend"></div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
 
     <div class="modal fade" id="attributionModal" tabindex="-1" role="dialog">
       <div class="modal-dialog">
