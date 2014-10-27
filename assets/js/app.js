@@ -1,10 +1,10 @@
 var map;
 
 //Set up dummy layers for web services so that leaflet can keep track when the layers are clicked and the actual data is loaded
-var nfhl = new L.GeoJSON(null,{});
+/*var nfhl = new L.GeoJSON(null,{});
 var railroad = new L.GeoJSON(null,{});
 var aadt = new L.GeoJSON(null,{});
-var trout_streams = new L.GeoJSON(null,{});
+var trout_streams = new L.GeoJSON(null,{});*/
 
 //use jquery to control what happens on various clisk events
 $(document).on("click", ".feature-row", function(e) {
