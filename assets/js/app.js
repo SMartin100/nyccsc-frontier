@@ -16,6 +16,11 @@ $("#about-btn").click(function() {
   return false;
 });
 
+$("#wmsSlider-btn").click(function() {
+  $("#wmsSliderModal").modal("show");
+  return false;
+});
+
 $("#full-extent-btn").click(function() {
   map.fitBounds(ny_county.getBounds());
   return false;
@@ -67,31 +72,7 @@ function sidebarClick(id) {
   }
 }
 
-/* Basemap Layers */
-var mapquestOSM = L.tileLayer("http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png", {
-  maxZoom: 19,
-  subdomains: ["otile1", "otile2", "otile3", "otile4"],
-  attribution: 'Tiles courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a> <img src="http://developer.mapquest.com/content/osm/mq_logo.png">. Map data (c) <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> contributors, CC-BY-SA.'
-});
-var mapquestOAM = L.tileLayer("http://{s}.mqcdn.com/tiles/1.0.0/sat/{z}/{x}/{y}.jpg", {
-  maxZoom: 18,
-  subdomains: ["oatile1", "oatile2", "oatile3", "oatile4"],
-  attribution: 'Tiles courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a>. Portions Courtesy NASA/JPL-Caltech and U.S. Depart. of Agriculture, Farm Service Agency'
-});
-var mapquestHYB = L.layerGroup([L.tileLayer("http://{s}.mqcdn.com/tiles/1.0.0/sat/{z}/{x}/{y}.jpg", {
-  maxZoom: 18,
-  subdomains: ["oatile1", "oatile2", "oatile3", "oatile4"]
-}), L.tileLayer("http://{s}.mqcdn.com/tiles/1.0.0/hyb/{z}/{x}/{y}.png", {
-  maxZoom: 19,
-  subdomains: ["oatile1", "oatile2", "oatile3", "oatile4"],
-  attribution: 'Labels courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a> <img src="http://developer.mapquest.com/content/osm/mq_logo.png">. Map data (c) <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> contributors, CC-BY-SA. Portions Courtesy NASA/JPL-Caltech and U.S. Depart. of Agriculture, Farm Service Agency'
-})]);
 
-
-var topoESRI = new L.TileLayer("http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}.png", {
-    maxZoom: 19,
-    attribution: 'Basemap Courtesy of <a href="http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer" target="_blank">ESRI</a>'
-  });
 
 /* Overlay Layers */
 
@@ -102,6 +83,8 @@ map = L.map("map", {
   zoomControl: false,
   attributionControl: false
 });
+
+
 
 
 /* function to toggle layers on and off */
@@ -127,8 +110,8 @@ function getGISdata(e){
     $.getJSON(url, function (data) {
         $("#gisdata").empty();
         $.each(data, function( index, value ) {
-          console.log(value.sectors)
-          var content = "<div class='panel panel-default toc-layer' id='" + value.tablename + "_layer' sector='" + value.sectors + "_sector' style='opacity:" + value.opacity + ";' ><div class='panel-heading layer-heading'><div class='row clearfix'><label>&nbsp;<input type='checkbox' name='overlayLayers'  id='" + value.tablename + "_toggle' data-toggle='tooltip' data-placement='top' title='Add to  map' onclick=layerToggle('" + value.tablename + "')>&nbsp;</label><a class='panel-title' data-toggle='collapse' href='#panel-element-" + value.tablename + "'>" + value.name + "</a></div></div><div id='panel-element-" + value.tablename + "' class='panel-collapse collapse in '><div class='panel-body'><div class='row clearfix'><div class='tabbable' id='tabs-101109'><ul class='nav nav-tabs'><li class='active'><a href='#panel-legend-" + value.tablename + "' data-toggle='tab'>Legend</a></li><li><a href='#panel-info-" + value.tablename + "' data-toggle='tab'>Info</a></li></ul><div class='tab-content'> <div class='tab-pane active' id='panel-legend-" + value.tablename + "'><br>&nbsp;<img src='assets/img/" + value.img_path + "'></div> <div class='tab-pane'id='panel-info-" + value.tablename + "'><br><p><strong>Source: </strong><a target='_blank_' href='" + value.url_source + "'>" + value.source + "</a></p><p><strong>Last Updated: </strong>" + value.last_updated + "</p><p><strong>Description:</strong> " + value.description + "</p><p><strong>Native format:</strong> " + value.native_format + " </p><p><a target='_blank_' class='btn btn-default' href='" + value.url_download + "'><strong>Download from Source</strong></a></p><p><a target='_blank_' class='btn btn-default' href='" + value.url_metadata + "'><strong>Metadata Link </strong></a></p></div></div></div></div></div></div><script>$('#" + value.tablename + "_toggle').one('click',function(){$.getScript('assets/js/" + value.tablename + "Load.js');});</script>";
+          //console.log(value.sectors)
+          var content = "<div class='panel panel-default toc-layer' id='" + value.tablename + "_layer' sector='" + value.sectors + "_sector' style='opacity:" + value.opacity + ";' ><div class='panel-heading layer-heading'><div class='row clearfix'><label>&nbsp;<input type='checkbox' name='overlayLayers'  id='" + value.tablename + "_toggle' data-toggle='tooltip' data-placement='top' title='Add to  map' onclick=layerToggle('" + value.tablename + "')>&nbsp;</label><a class='panel-title' data-toggle='collapse' href='#panel-element-" + value.tablename + "'>" + value.name + "</a></div></div><div id='panel-element-" + value.tablename + "' class='panel-collapse collapse  '><div class='panel-body'><div class='row clearfix'><div class='tabbable' id='tabs-101109'><ul class='nav nav-tabs'><li class='active'><a href='#panel-legend-" + value.tablename + "' data-toggle='tab'>Legend</a></li><li><a href='#panel-info-" + value.tablename + "' data-toggle='tab'>Info</a></li></ul><div class='tab-content'> <div class='tab-pane active' id='panel-legend-" + value.tablename + "'><br>&nbsp;<img src='assets/img/" + value.img_path + "'></div> <div class='tab-pane'id='panel-info-" + value.tablename + "'><br><p><strong>Source: </strong><a target='_blank_' href='" + value.url_source + "'>" + value.source + "</a></p><p><strong>Last Updated: </strong>" + value.last_updated + "</p><p><strong>Description:</strong> " + value.description + "</p><p><strong>Native format:</strong> " + value.native_format + " </p><p><a target='_blank_' class='btn btn-default' href='" + value.url_download + "'><strong>Download from Source</strong></a></p><p><a target='_blank_' class='btn btn-default' href='" + value.url_metadata + "'><strong>Metadata Link </strong></a></p></div></div></div></div></div></div><script>$('#" + value.tablename + "_toggle').one('click',function(){$.getScript('assets/js/load/" + value.tablename + ".js');});</script>";
 
           $("#gisdata").append(content);
           

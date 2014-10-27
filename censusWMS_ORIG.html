@@ -1,50 +1,50 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
-<head>
-    <title>Leaflet Census</title>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-    
-    <link rel="stylesheet" href="http://www.web-maps.com/CensusTest/leaflet/leaflet.css" />
-    <!--[if lte IE 8]><link rel="stylesheet" href="leaflet/leaflet.ie.css" /><![endif]-->
-    <style type="text/css">
-        body
-        {
-            padding: 0;
-            margin: 0;
-        }
-        html, body, #map
-        {
-            height: 100%;
-        }
-
-	</style>
-
-    <script src="http://www.web-maps.com/CensusTest/js/jquery-1.6.3.min.js" type="text/javascript"></script>
-    <script src="http://www.web-maps.com/CensusTest/js/modernizr-latest.js" type="text/javascript"></script>
-    <link type="text/css" href="http://www.web-maps.com/CensusTest/css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
-	<script type="text/javascript" src="http://www.web-maps.com/CensusTest/js/jquery-ui-1.8.16.custom.min.js"></script>
-</head>
-<body>
 
 
-<!--
-        <div id='mapStylesDiv' class='ui-widget-content' width="50" height="20">
-            <label class='styleSelector' >Census</label>
-            <img class='logo' src="leaflet/images/OnTerra_FL_RGB_smaller.png"  alt="OnTerraSystems" />
 
-        </div>
--->
-    <div id="mapDiv"></div>
-    <div id="BingLogo"><img src="http://www.web-maps.com/CensusTest/leaflet/images/BINGMAP.PNG" width="93" height="29" alt="Bing Maps" /></div>
 
-    <script src="http://www.web-maps.com/CensusTest/leaflet/leaflet.js" type="text/javascript"></script>
-    <script src="http://www.web-maps.com/CensusTest/leaflet/TileLayer.Bing0.js" type="text/javascript"></script>
 
-    <script type="text/javascript">
-	    
-	    var map;
-	    var infobox = null;
-	    var popup;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                           <script>
+        var bingkey = 'Ahxau5mtl944aCyAb8tfmrLebWENWZDXEmMIQWRaRQjTho2U0NkHqAUpcT1nTW1v';
+        var map;
+        var infobox = null;
+        var popup;
         //var BingAttribution = '<a target="_blank" href="http://www.onterrasystems.com">&copy; 2011 OnTerraSystems</a>'
         var BingAttribution = '';
         var TigerAttribution ='tigerweb.geo.census.gov <a target="_blank" href="http://www.onterrasystems.com">&copy; 2011 OnTerraSystems</a>'
@@ -57,7 +57,24 @@
 
         $(document).ready(function () {
 
-           
+            var BingRoad = new L.TileLayer.Bing(bingkey, "Road",
+                    {
+                        maxZoom: 21,
+                        attribution: BingAttribution
+                    });
+
+            var BingAerial = new L.TileLayer.Bing(bingkey, "Aerial",
+                    {
+                        maxZoom: 21,
+                        attribution: BingAttribution
+                    });
+
+            var BingAerialWithLabels = new L.TileLayer.Bing(bingkey, "AerialWithLabels",
+                    {
+                        maxZoom: 21,
+                        attribution: BingAttribution
+                    });
+
 // tigerweb tile service
             var censusTransportation = new L.TileLayer('http://tigerweb.geo.census.gov/ArcGIS/rest/services/Transportation/MapServer/tile/{z}/{y}/{x}.jpg',
              {
@@ -183,21 +200,18 @@
 
 
 
-                    map.addLayer(topoESRI, false);
-
-
-var topoESRI = new L.TileLayer("http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}.png", {
-    maxZoom: 19,
-    attribution: 'Basemap Courtesy of <a href="http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer" target="_blank">ESRI</a>'
-  });
+                    map.addLayer(censusStates, false);
+                    map.addLayer(BingRoad, true);
 
             var baseMaps = {
-                "topoESRI": topoESRI
+                "BingRoads": BingRoad,
+                "BingAerial": BingAerial,
+                "BingAerialWithLabels": BingAerialWithLabels
             };
 
 
             var overlayMaps = {
-                //"Hydro": censusHydro,
+                "Hydro": censusHydro,
                 "Transportation": censusTransportation,
                 "States": censusStates,
                 "Counties": censusCounties,
@@ -229,61 +243,59 @@ var topoESRI = new L.TileLayer("http://services.arcgisonline.com/ArcGIS/rest/ser
 
 
         function onMapClick(e) {
-	        popup.setLatLng(e.latlng);
-	        var bds = map.getBounds();
+            popup.setLatLng(e.latlng);
+            var bds = map.getBounds();
             var sz = map.getSize();
-	        var w = bds.getNorthEast().lng - bds.getSouthWest().lng;
-	        var h = bds.getNorthEast().lat - bds.getSouthWest().lat;
-	        var dw = ((e.latlng.lng - bds.getSouthWest().lng) / w) * sz.x;
-	        var dh = ((bds.getNorthEast().lat - e.latlng.lat) / h) * sz.y;
-	        //var getInfoURL = "http://tigerweb.geo.census.gov/ArcGIS/services/tigerWMS/MapServer/WMSServer?Service=WMS&Version=1.1.1&Request=GetFeatureInfo&Layers=States,Counties,Census Tracts,Census Block Groups,Census Blocks,Zip Code Tabulation Areas&SRS=EPSG:4326&BBOX=" + bds.toBBoxString() + "&width=" + sz.x.toString() + "&height=" + sz.y.toString() + "&QUERY_LAYERS=States,Counties,Census Tracts,Census Block Groups,Census Blocks,Zip Code Tabulation Areas&INFO_FORMAT=text/xml&X=" + dw + "&Y=" + dh;
-	        //var getInfoURL = "http://etl.onterrasys.com/CensusTest/GetFeature.ashx?Layers=States,Counties,Census Tracts,Census Block Groups,Census Blocks&SRS=EPSG:4326&BBOX=" + bds.toBBoxString() + "&width=" + sz.x.toString() + "&height=" + sz.y.toString() + "&QUERY_LAYERS=States,Counties,Census Tracts,Census Block Groups,Census Blocks&INFO_FORMAT=text/xml&X=" + dw + "&Y=" + dh;
-	        var getInfoURL = "Layers=States,Counties,Census Tracts,Census Block Groups,Census Blocks,Zip Code Tabulation Areas&SRS=EPSG:4326&BBOX=" + bds.toBBoxString() + "&width=" + sz.x.toString() + "&height=" + sz.y.toString() + "&QUERY_LAYERS=States,Counties,Census Tracts,Census Block Groups,Census Blocks,Zip Code Tabulation Areas&INFO_FORMAT=text/xml&X=" + dw + "&Y=" + dh;
-console.log(getInfoURL)
-	        $(document).ajaxError(function (e, xhr, settings, exception) {
-	           // var check = xhr.getAllResponseHeaders();
-	            alert('error in: ' + settings.url + ' \n' + 'error:'  + xhr.statusText);
-	        }); 
+            var w = bds.getNorthEast().lng - bds.getSouthWest().lng;
+            var h = bds.getNorthEast().lat - bds.getSouthWest().lat;
+            var dw = ((e.latlng.lng - bds.getSouthWest().lng) / w) * sz.x;
+            var dh = ((bds.getNorthEast().lat - e.latlng.lat) / h) * sz.y;
+            //var getInfoURL = "http://tigerweb.geo.census.gov/ArcGIS/services/tigerWMS/MapServer/WMSServer?Service=WMS&Version=1.1.1&Request=GetFeatureInfo&Layers=States,Counties,Census Tracts,Census Block Groups,Census Blocks,Zip Code Tabulation Areas&SRS=EPSG:4326&BBOX=" + bds.toBBoxString() + "&width=" + sz.x.toString() + "&height=" + sz.y.toString() + "&QUERY_LAYERS=States,Counties,Census Tracts,Census Block Groups,Census Blocks,Zip Code Tabulation Areas&INFO_FORMAT=text/xml&X=" + dw + "&Y=" + dh;
+            //var getInfoURL = "http://etl.onterrasys.com/CensusTest/GetFeature.ashx?Layers=States,Counties,Census Tracts,Census Block Groups,Census Blocks&SRS=EPSG:4326&BBOX=" + bds.toBBoxString() + "&width=" + sz.x.toString() + "&height=" + sz.y.toString() + "&QUERY_LAYERS=States,Counties,Census Tracts,Census Block Groups,Census Blocks&INFO_FORMAT=text/xml&X=" + dw + "&Y=" + dh;
+            var getInfoURL = "GetFeature.ashx?Layers=States,Counties,Census Tracts,Census Block Groups,Census Blocks,Zip Code Tabulation Areas&SRS=EPSG:4326&BBOX=" + bds.toBBoxString() + "&width=" + sz.x.toString() + "&height=" + sz.y.toString() + "&QUERY_LAYERS=States,Counties,Census Tracts,Census Block Groups,Census Blocks,Zip Code Tabulation Areas&INFO_FORMAT=text/xml&X=" + dw + "&Y=" + dh;
+
+            $(document).ajaxError(function (e, xhr, settings, exception) {
+               // var check = xhr.getAllResponseHeaders();
+                alert('error in: ' + settings.url + ' \n' + 'error:'  + xhr.statusText);
+            }); 
             
             $.ajax({
                 type: "GET",
-                url: "proxy.php?url=" + "http://tigerweb.geo.census.gov/ArcGIS/services/tigerWMS/MapServer/WMSServer?Service=WMS&Version=1.1.1&Request=GetFeatureInfo&" + getInfoURL,
+                url: getInfoURL,
                 dataType: "xml",
                 success: GetFeatureInfo
             });
 
-	    }
+        }
 
-	    function GetFeatureInfo(xml) {
-	        var result = "<table border=\"1\"><tr><th>NAME</th><th>HU100</th><th>POP100</th></tr>";
-	        $(xml).find('FeatureInfoResponse').each(function () {
-	            $(this).find('FIELDS').each(function () {
-	                var HU100 = $(this).attr('HU100');
-	                var POP100 = $(this).attr('POP100');
-	                var NAME = $(this).attr('NAME');
-	                var GEOID = $(this).attr('GEOID');
-	                result += "<tr><td>" + NAME + "</td><td>" + HU100 + "</td><td>" + POP100 + "</td></tr>";
-	            });
-	        });
-	        popup.setContent(result+"</table>");
-	        map.openPopup(popup);
-	    }
+        function GetFeatureInfo(xml) {
+            var result = "<table border=\"1\"><tr><th>NAME</th><th>HU100</th><th>POP100</th></tr>";
+            $(xml).find('FeatureInfoResponse').each(function () {
+                $(this).find('FIELDS').each(function () {
+                    var HU100 = $(this).attr('HU100');
+                    var POP100 = $(this).attr('POP100');
+                    var NAME = $(this).attr('NAME');
+                    var GEOID = $(this).attr('GEOID');
+                    result += "<tr><td>" + NAME + "</td><td>" + HU100 + "</td><td>" + POP100 + "</td></tr>";
+                });
+            });
+            popup.setContent(result+"</table>");
+            map.openPopup(popup);
+        }
 
-	    function onLocationFound(e) {
-	        var radius = e.accuracy / 2;
+        function onLocationFound(e) {
+            var radius = e.accuracy / 2;
 
-	        var marker = new L.Marker(e.latlng);
-	        map.addLayer(marker);
-	        marker.bindPopup("You are within " + radius + " meters from this point").openPopup();
+            var marker = new L.Marker(e.latlng);
+            map.addLayer(marker);
+            marker.bindPopup("You are within " + radius + " meters from this point").openPopup();
 
-	        var circle = new L.Circle(e.latlng, radius);
-	        map.addLayer(circle);
-	    }
+            var circle = new L.Circle(e.latlng, radius);
+            map.addLayer(circle);
+        }
 
-	    function onLocationError(e) {
-	       alert(e.message);
+        function onLocationError(e) {
+           alert(e.message);
            map.setView(new L.LatLng(39.748, -104.981),8);
-	    }
+        }
     </script>
-</body>
-</html>

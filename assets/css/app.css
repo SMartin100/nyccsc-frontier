@@ -94,7 +94,9 @@ input[type="radio"], input[type="checkbox"] {
 }
 .tab-pane {
   margin: 5px;
+  padding: 5px;
 }
+
 .navbar .navbar-brand {
   font-weight: bold;
   font-size: 25px;
