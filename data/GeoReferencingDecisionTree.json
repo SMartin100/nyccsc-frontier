@@ -1,0 +1,42 @@
+{
+ "name": "Identify Dataset",
+ "children": [
+  {
+   "name": "New or Existing Geometry?",
+   "children": [
+    {
+     "name": "New",
+     "children": [    
+        {"name": "Lat/Lon array"},
+        {"name": "Use exisiting data (shp, geojson..)"},
+        {"name": "Digitize new geometry"}
+    ]
+    },
+    {
+     "name": "Existing",
+     "children": [    
+        {"name": "Select geometry type",
+       "children": [    
+          {"name": "Huc8",
+           "children": [    
+              {"name": "Select 1 or more geometries"}
+            ]
+          },
+          {"name": "County",
+           "children": [    
+              {"name": "Select 1 or more geometries"}
+            ]
+          },
+          {"name": "DEC Region",
+           "children": [    
+              {"name": "Select 1 or more geometries"}
+            ]
+          }
+        ]
+      }
+    ]
+    }
+   ]
+  }
+ ]
+}

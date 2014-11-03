@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Testmap</title>
+  <meta charset="utf-8" />
+  <script src="http://cdn.leafletjs.com/leaflet-0.6.1/leaflet.js"></script>
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <style>
+  @import url(http://cdn.leafletjs.com/leaflet-0.6.1/leaflet.css);
+  </style>
+  <link rel="stylesheet" href="lib/leaflet-0.7.3/leaflet.css">
+</head>
+<body>
+  <div id="map" style="width: 760px; height: 300px"></div>
+    <div id='selections' class="selections">
+    <a href='#' class="show">Choose what documents to display</a>
+    <div class='content'>
+      <a href='#' class="hide">Hide</a>
+      <div id="toggles">
+      </div>
+    </div>
+  </div>
+  <div id='loading'>
+  </div>
+  <div id='selected'>
+    <h1>Explore Climate Documents in New York</h1>
+  </div>
+  <div id='about'>
+    <a href='#' class="show">About</a>
+    <p class='content'>
+      Explore Climate Documents using a voronoi diagram. <!-- Created by <a href="http://chriszetter.com">Chris Zetter</a>, powered by data from <a href="http://www.superlocate.net/">SuperLocate</a>, maps copyright
+      <a href='https://www.mapbox.com/about/maps/' target='_blank'>Mapbox and OpenStreetMap</a>. -->
+      <a href='#' class="hide">Hide</a>
+  </div>
+  <script src="lib/jquery-1.11.1.min.js"></script>
+  <script src="lib/leaflet-0.7.3/leaflet.js"></script>
+  <script type="text/javascript" src="lib/topojson-master/topojson.js"></script>
+  <script type="text/javascript" src="lib/topojsonHelper.js"></script>
+
+  
+  <script>
+  var ny_countySearch=[];
+
+  var ny_county = new L.TopoJSON(null, {
+      style: {
+              clickable: true,
+              weight: 2,
+              color: 'black',
+              opacity: 1,
+              fill: true,
+              fillOpacity: 0
+      },
+              
+
+      onEachFeature: function (feature, layer) {
+          ny_countySearch.push({
+              name: layer.feature.id + " County",
+              source: "ny_county",
+              id: L.stamp(layer),
+              bounds: layer.getBounds(),
+              lat: layer.getBounds().getSouthWest().lat,
+              lng: layer.getBounds().getSouthWest().lng,
+              bounds: layer.getBounds()
+          });
+
+          if (feature.properties) {
+          
+              layer.bindPopup(
+                  "<strong>" + feature.id + " County</strong>" ,  {
+                  closeButton: false
+              });
+          }
+  /*        layer.on({
+              mouseover: function(e) {
+                  var layer = e.target;
+                  layer.setStyle({
+                      weight: 3,
+                      color: "#00FFFF",
+                      opacity: 1
+                  });
+                  if (!L.Browser.ie && !L.Browser.opera) {
+                      layer.bringToFront();
+                  }
+              },
+              mouseout: function(e) {
+                  ny_county.resetStyle(e.target);
+              }
+          });*/
+
+      }
+  });
+
+  $.getJSON("data/ny_county.topojson", function (data) {
+      ny_county.addData(data);
+  });
+  var map = L.map('map').setView([43,-74.5], 6);
+  var toolserver = L.tileLayer('http://{s}.www.toolserver.org/tiles/bw-mapnik/{z}/{x}/{y}.png');
+  var stamen = L.tileLayer('http://{s}.tile.stamen.com/toner/{z}/{x}/{y}.png', {attribution: 'Add some attributes here!'}).addTo(map);
+  var baseLayers = {"stamen": stamen, "toolserver-mapnik":toolserver};
+    var overlays = {
+      "Counties": ny_county/*,
+      "DOT Regions": ny_dot,
+      "DEC Regions": ny_dec,
+      "Climate Divisions": ny_clim_div*/
+    };
+  L.control.layers(baseLayers,overlays).addTo(map);
+  var centerPoint = L.circle([map.getCenter().lat, map.getCenter().lng], 200).addTo(map);
+
+  map.on("viewreset", showCenterInfo);
+  map.on("drag", showCenterInfo);
+  map.on("mousemove", setCurrentPosition);
+
+  var container = d3.select("body").append("div").attr("id","#container");
+  var svgContainer = container.append("svg").attr("width", 760).attr("height", 300);
+
+  var size = 15;
+  var fontsize = 15;
+
+  var zoomIn = svgContainer.append("rect")
+   .attr("x", 0)
+   .attr("y", size)
+   .attr("width", size)
+   .attr("height", size)
+   .style("fill","#0f0")
+   .on("mouseup",zoomInAction);
+
+ var zoomOut = svgContainer.append("rect")
+    .attr("x", size+10)
+    .attr("y", size)
+    .attr("width", size)
+    .attr("height", size)
+    .style("fill","#f00")
+    .on("mouseup",zoomOutAction);
+
+  var zoomText = svgContainer.append("text")
+    .text("Zoomlevel: "+map.getZoom())
+    .attr("x", (size * 2)+20)
+    .attr("y", size * 2)
+    .style("fill","#444")
+    .style("font-size",fontsize);
+
+function zoomOutAction(){
+    zoomFunction(-1);
+  }
+function zoomInAction(){
+    zoomFunction(1);
+  }
+function zoomFunction(value){
+    var newZoomlevel = map.getZoom() + value
+    map.setZoom(newZoomlevel)
+    zoomText.text("Zoomlevel: "+newZoomlevel)
+  }
+
+  var centerText = svgContainer.append("text")
+    .attr("x", 0)
+    .attr("y", size * 3)
+    .style("fill","#444")
+    .style("font-size",fontsize);
+
+  //console.log(map.getBounds()._northEast, map.getBounds()._southWest)
+  var group = svgContainer.append('g');
+  var scaleLat = d3.scale.linear();
+  var scaleLng = d3.scale.linear();
+
+  var currentPos = svgContainer.append('text')
+      .style("fill","#444")
+      .style("font-size",fontsize)
+
+  showCenterInfo();
+
+  function showCenterInfo(){
+      centerText.text("Center Lat: "+map.getCenter().lat.toFixed(4)+" Lng: "+map.getCenter().lng.toFixed(4))
+      centerPoint.setLatLng([map.getCenter().lat, map.getCenter().lng])
+
+      defineExtentVisualisation();
+           
+  }
+
+  function defineExtentVisualisation(){
+    var rectangle = [];
+    rectangle.push([map.getBounds()._northEast.lat, map.getBounds()._northEast.lng])
+    rectangle.push([map.getBounds()._northEast.lat, map.getBounds()._southWest.lng])
+    rectangle.push([map.getBounds()._southWest.lat, map.getBounds()._southWest.lng])
+    rectangle.push([map.getBounds()._southWest.lat, map.getBounds()._northEast.lng])
+    //console.log(rectangle)
+     
+    scaleLat.domain([map.getBounds()._northEast.lat,map.getBounds()._southWest.lat])
+            .range([size*4,size*12]);
+
+    scaleLng.domain([map.getBounds()._southWest.lng, map.getBounds()._northEast.lng])
+            .range([0,550]); 
+
+    //console.log(scaleLat.invert(100))
+    //console.log(scaleLat(52.30))
+    
+    group.selectAll('text').remove();
+    var coordText = group.selectAll('text').data(rectangle).enter().append("text").text("Hello")
+    coordText.attr("x", function(data,i){return scaleLng(data[1])})
+      .attr("y", function(data,i){return scaleLat(data[0])})
+      .style("fill","#444")
+      .style("font-size",fontsize)
+      .text(function(data){return "Lat: "+data[0].toFixed(2) +" : Lng: "+ data [1].toFixed(2)});
+  }
+
+  function setCurrentPosition(e){ 
+    //console.log(e)
+    var coordinates = e.latlng; 
+    //console.log(coordinates.lat,coordinates.lng);
+    currentPos.transition().duration(2000).ease('bounce').attr("x", scaleLng(coordinates.lng))
+      .attr("y", scaleLat(coordinates.lat))      
+      .text("Lat: "+coordinates.lat.toFixed(2) +" : Lng: "+ coordinates.lng.toFixed(2));
+  }
+
+  </script>
+  <script type="text/javascript" src="assets/js/voronoi_map.js"></script>
+ </body>
+</html>
