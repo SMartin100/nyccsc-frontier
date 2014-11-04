@@ -1,3 +1,3 @@
-$.getJSON("data/usgs_streamflow.geojson", function(data) {     
+$.getJSON("http://frontierspatial.com/data/usgs_streamflow2geojson.php?callback=?", function(data) {     
           usgs_streamflow.addData(data);
 });
