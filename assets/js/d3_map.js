@@ -1,44 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Testmap</title>
-  <meta charset="utf-8" />
-  <script src="http://cdn.leafletjs.com/leaflet-0.6.1/leaflet.js"></script>
-  <script src="http://d3js.org/d3.v3.min.js"></script>
-  <style>
-  @import url(http://cdn.leafletjs.com/leaflet-0.6.1/leaflet.css);
-  </style>
-  <link rel="stylesheet" href="lib/leaflet-0.7.3/leaflet.css">
-</head>
-<body>
-  <div id="map" style="width: 760px; height: 300px"></div>
-    <div id='selections' class="selections">
-    <a href='#' class="show">Choose what documents to display</a>
-    <div class='content'>
-      <a href='#' class="hide">Hide</a>
-      <div id="toggles">
-      </div>
-    </div>
-  </div>
-  <div id='loading'>
-  </div>
-  <div id='selected'>
-    <h1>Explore Climate Documents in New York</h1>
-  </div>
-  <div id='about'>
-    <a href='#' class="show">About</a>
-    <p class='content'>
-      Explore Climate Documents using a voronoi diagram. <!-- Created by <a href="http://chriszetter.com">Chris Zetter</a>, powered by data from <a href="http://www.superlocate.net/">SuperLocate</a>, maps copyright
-      <a href='https://www.mapbox.com/about/maps/' target='_blank'>Mapbox and OpenStreetMap</a>. -->
-      <a href='#' class="hide">Hide</a>
-  </div>
-  <script src="lib/jquery-1.11.1.min.js"></script>
-  <script src="lib/leaflet-0.7.3/leaflet.js"></script>
-  <script type="text/javascript" src="lib/topojson-master/topojson.js"></script>
-  <script type="text/javascript" src="lib/topojsonHelper.js"></script>
-
-  
-  <script>
   var ny_countySearch=[];
 
   var ny_county = new L.TopoJSON(null, {
@@ -94,9 +53,8 @@
       ny_county.addData(data);
   });
   var map = L.map('map').setView([43,-74.5], 6);
-  var toolserver = L.tileLayer('http://{s}.www.toolserver.org/tiles/bw-mapnik/{z}/{x}/{y}.png');
   var stamen = L.tileLayer('http://{s}.tile.stamen.com/toner/{z}/{x}/{y}.png', {attribution: 'Add some attributes here!'}).addTo(map);
-  var baseLayers = {"stamen": stamen, "toolserver-mapnik":toolserver};
+  var baseLayers = {"stamen": stamen};
     var overlays = {
       "Counties": ny_county/*,
       "DOT Regions": ny_dot,
@@ -210,8 +168,3 @@ function zoomFunction(value){
       .attr("y", scaleLat(coordinates.lat))      
       .text("Lat: "+coordinates.lat.toFixed(2) +" : Lng: "+ coordinates.lng.toFixed(2));
   }
-
-  </script>
-  <script type="text/javascript" src="assets/js/voronoi_map.js"></script>
- </body>
-</html>
